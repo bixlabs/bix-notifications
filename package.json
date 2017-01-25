@@ -1,0 +1,28 @@
+{
+  "name": "bix-notifications",
+  "version": "1.0.0",
+  "description": "Notification module",
+  "main": "index.js",
+  "scripts": {
+    "test": "\"echo \\\"Error: no test specified\\\" && exit 1\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EddSuarez/notifications.git"
+  },
+  "keywords": [
+    "bixlabs",
+    "notifications"
+  ],
+  "author": "Edd Suárez <eddsuarez89@gmail.com> (https://github.com/eddsuarez)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/EddSuarez/notifications/issues"
+  },
+  "homepage": "https://github.com/EddSuarez/notifications#readme",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "mongoose": "^4.7.8",
+    "path": "^0.12.7"
+  }
+}
