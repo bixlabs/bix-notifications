@@ -1,8 +1,6 @@
-'use strict';
-
-const db = require('./lib/db');
-const Configuration = require('./lib/config');
-const notificationController = require('./lib/controller');
+const db = require('./notifications/db');
+const Configuration = require('./notifications/config');
+const notificationController = require('./notifications/controller');
 
 function Notification(config) {
   this.config = new Configuration(config);
@@ -10,17 +8,17 @@ function Notification(config) {
   this.baseApi = this.config.baseApi;
 }
 
-Notification.prototype.startServer = function(app) {
+Notification.prototype.startServer = (app) => {
   const self = this;
   self.app = app;
   self.io = app.io;
   db.connect(this.configDatabase);
 
   // Expose endpoints
-  self.app.get(self.baseApi + '/all/:userid', notificationController.getAll);
-  self.app.put(self.baseApi + '/:notificationId', notificationController.updateUnread);
-  self.app.delete(self.baseApi + '/:notificationId', notificationController.delete);
-  self.app.post(self.baseApi + '/all', notificationController.updateAllUnread);
+  self.app.get(`${self.baseApi}/all/:userid`, notificationController.getAll);
+  self.app.put(`${self.baseApi}/:notificationId`, notificationController.updateUnread);
+  self.app.delete(`${self.baseApi}/:notificationId`, notificationController.delete);
+  self.app.post(`${self.baseApi}/all`, notificationController.updateAllUnread);
 
   self.io.on('connection', (socket) => {
     socket.emit('who-are-you');
@@ -30,7 +28,7 @@ Notification.prototype.startServer = function(app) {
       self.sendUnread(user.id);
 
       // Send to client endpoint base route forexposed endpoints
-      ack('{"baseApi":"'+ self.baseApi +'"}');
+      ack(`{"baseApi":"${self.baseApi}"}`);
     });
 
     socket.on('check-news', (user) => {
@@ -39,20 +37,20 @@ Notification.prototype.startServer = function(app) {
   });
 };
 
-Notification.prototype.send = function(event, notification) {
+Notification.prototype.send = (event, notification) => {
   const user = notification.to;
   this.io.sockets[user].emit(event, notification, (ack) => {
     if (ack) {
       notificationController
-      .update(notification._id, { sent: true },
+      .update(notification._id, { sent: true }, //eslint-disable-line
         (err) => {
           if (err) throw err;
         });
     }
   });
-}
+};
 
-Notification.prototype.sendUnread = function(userId) {
+Notification.prototype.sendUnread = (userId) => {
   const self = this;
   if (userId) {
     notificationController
@@ -63,9 +61,9 @@ Notification.prototype.sendUnread = function(userId) {
       });
     });
   }
-}
+};
 
-Notification.prototype.sendUnsent = function(userId) {
+Notification.prototype.sendUnsent = (userId) => {
   const self = this;
   if (userId) {
     notificationController
@@ -76,9 +74,9 @@ Notification.prototype.sendUnsent = function(userId) {
       });
     });
   }
-}
+};
 
-Notification.prototype.create = function(type, to, title, msg) {
+Notification.prototype.create = (type, to, title, msg) => {
   const data = { to, type, title, msg };
   notificationController.create(data, (err) => {
     if (err) throw err;
