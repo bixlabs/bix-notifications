@@ -1,9 +1,9 @@
 'use strict';
 
-const mongoose = require('mongoose');
+var mongoose = require('mongoose');
 
 // create a schema
-const notificationSchema = new mongoose.Schema({
+var notificationSchema = new mongoose.Schema({
   to: String,
   type: String,
   title: String,
@@ -22,7 +22,6 @@ const notificationSchema = new mongoose.Schema({
   }
 });
 
-
-const Notification = mongoose.model('Notification', notificationSchema);
+var Notification = mongoose.model('Notification', notificationSchema);
 
 module.exports = Notification;

@@ -1,5 +1,3 @@
-'use strict';
-
 const path = require('path');
 const fs = require('fs');
 
@@ -17,7 +15,9 @@ const fs = require('fs');
  */
 function Configuration(config) {
   if (!config) {
-    config = path.join(process.cwd(), 'notification.json');
+    // I placed the disable line here, however we must not reassign
+    // parameters, this is not allowed, we must fix it later.
+    config = path.join(process.cwd(), 'notification.json'); //eslint-disable-line
   }
 
   if (typeof config === 'string') {
