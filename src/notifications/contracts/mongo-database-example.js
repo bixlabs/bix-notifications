@@ -2,8 +2,13 @@
 /* eslint-disable */
 import NotificationDatabaseContract from './database';
 import Notification from './mongo-model-example';
+import databaseConnection from './mongo-connection-example';
 
 class MongoNotificationDatabase extends NotificationDatabaseContract {
+  constructor(config) {
+    databaseConnection.connect(config);
+  }
+
   create(data) {
     return new Notification(data).save();
   }
@@ -20,9 +25,8 @@ class MongoNotificationDatabase extends NotificationDatabaseContract {
     return Notification.update(id, { unread: false });
   }
 
-  //In here I guess we should use this userId somehow?
   setAllAsRead(userId) {
-    return Notification.update({ unread: true }, { unread: false }, { multi: true });
+    return Notification.update({ unread: true, to: userId }, { unread: false }, { multi: true });
   }
 
   getAllUnread(userId) {
