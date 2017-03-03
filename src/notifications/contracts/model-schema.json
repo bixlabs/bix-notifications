@@ -1,0 +1,17 @@
+{
+  "to": "String",
+  "type": "String",
+  "title": "String",
+  "message": "String",
+  "unread": {
+    "type": "Boolean",
+    "default": true
+  },
+  "sent": {
+    "type": "Boolean",
+    "default": false
+  },
+  "createdAt": {
+    "type": "Date"
+  }
+}
