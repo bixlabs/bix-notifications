@@ -1,3 +1,4 @@
+// This is just an example that can be use for tests later and also as documentation.
 const mongoose = require('mongoose');
 
 // create a schema
@@ -5,7 +6,7 @@ const notificationSchema = new mongoose.Schema({
   to: String,
   type: String,
   title: String,
-  msg: String,
+  message: String,
   unread: {
     type: Boolean,
     default: true
@@ -23,4 +24,4 @@ const notificationSchema = new mongoose.Schema({
 
 const Notification = mongoose.model('Notification', notificationSchema);
 
-module.exports = Notification;
+export default Notification;
