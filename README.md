@@ -72,3 +72,14 @@ boot(app, __dirname, function(err) {
     notification.startServer(io);
 });
 ```
+
+## How to activate Debug mode
+You just need  to run your server with a specific DEBUG environment variable like this:
+
+```bash
+$ DEBUG=web-notifications <Your-start-command-here>
+```
+That will do the job.
+
+If this documentation still doesn't make sense to you go to [Debug](https://www.npmjs.com/package/debug)documentation 
+which is the library we are using.
