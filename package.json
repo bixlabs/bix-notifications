@@ -26,11 +26,17 @@
     ]
   },
   "eslintConfig": {
-    "plugins": ["cucumber"],
+    "plugins": [
+      "cucumber"
+    ],
     "extends": "airbnb",
     "parser": "babel-eslint",
     "rules": {
-      "comma-dangle": 0
+      "comma-dangle": 0,
+      "generator-star-spacing": 0,
+      "no-use-before-define": 0,
+      "object-curly-spacing": 0,
+      "consistent-return": 0
     }
   },
   "repository": {
@@ -48,6 +54,7 @@
   },
   "homepage": "https://github.com/EddSuarez/notifications#readme",
   "dependencies": {
+    "debug": "^2.6.2",
     "fs": "0.0.1-security",
     "mongoose": "^4.7.8",
     "path": "^0.12.7",
