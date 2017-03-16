@@ -3,26 +3,24 @@ import NotificationController from './notifications/controller';
 class Notification {
   constructor(database) {
     this.notificationController = new NotificationController(database);
-
-    this.getAllUnread = this.notificationController.getAllUnread;
-    this.setAsRead = this.notificationController.setAsRead;
-    this.remove = this.notificationController.remove;
-    this.setAllAsRead = this.notificationController.setAllAsRead;
   }
 
   startServer(socketIO) {
-    this.io = socketIO;
+    const self = this;
+    self.io = socketIO;
 
-    this.io.on('connection', (socket) => {
+    self.io.on('connection', (socket) => {
       socket.emit('who-are-you');
 
-      socket.on('check-in', (user) => {
-        this.io.sockets[user.id] = socket;
-        this.sendUnread(user.id);
+      socket.on('check-in', (user, ack) => {
+        self.io.sockets[user.id] = socket;
+        self.sendUnread(user.id);
+
+        ack();
       });
 
       socket.on('check-news', (user) => {
-        this.sendUnsent(user.id);
+        self.sendUnsent(user.id);
       });
     });
   }
@@ -34,15 +32,21 @@ class Notification {
    */
   send(event, notification) {
     const user = notification.to;
-    this.io.sockets[user].emit(event, notification, (ack) => {
-      if (ack) {
-        this.notificationController
-          .update(notification._id, { sent: true }) //eslint-disable-line
-          .then((result) => {
-            return result;
-          });
-      }
+    const notificationUpdate = new Promise((resolve, reject) => {
+      this.io.sockets[user].emit(event, notification, (ack) => {
+        if (ack) {
+          this.notificationController
+            .update(notification._id, { sent: true }) //eslint-disable-line
+            .then(updatedNotification => resolve(updatedNotification))
+            .catch((err) => {
+              reject(err);
+            });
+        } else {
+          resolve();
+        }
+      });
     });
+    return notificationUpdate;
   }
 
   /**
@@ -51,16 +55,27 @@ class Notification {
    */
   sendUnread(userId) {
     if (userId) {
-      this.notificationController
-        .getAllUnread(userId)
-        .then((data) => {
-          data.forEach((notification) => {
-            this.send('unread', notification);
+      const notificatonsSent = new Promise((resolve, reject) => {
+        this.notificationController
+          .getAllUnread(userId)
+          .then((notifications) => {
+            const sentNotifications = notifications.map((notification) => {
+              const sentNotification = this.send('unread', notification);
+              return sentNotification;
+            });
+            return Promise.all(sentNotifications);
+          })
+          .then((notifications) => {
+            resolve(notifications);
+          })
+          .catch((err) => {
+            reject(err);
           });
-        }, (err) => {
-          throw err;
-        });
+      });
+      return notificatonsSent;
     }
+
+    return null;
   }
 
   /**
@@ -69,16 +84,27 @@ class Notification {
    */
   sendUnsent(userId) {
     if (userId) {
-      this.notificationController
-        .getAllUnsent(userId)
-        .then((data) => {
-          data.forEach((notification) => {
-            this.send('news', notification);
+      const notificatonsSent = new Promise((resolve, reject) => {
+        this.notificationController
+          .getAllUnsent(userId)
+          .then((notifications) => {
+            const sentNotifications = notifications.map((notification) => {
+              const sentNotification = this.send('news', notification);
+              return sentNotification;
+            });
+            return Promise.all(sentNotifications);
+          })
+          .then((notifications) => {
+            resolve(notifications);
+          })
+          .catch((err) => {
+            reject(err);
           });
-        }, (err) => {
-          throw err;
-        });
+      });
+      return notificatonsSent;
     }
+
+    return null;
   }
 
   /**
@@ -88,12 +114,11 @@ class Notification {
    * @param  {string} data.title title fo the notification
    * @param  {string} data.msg   notification content
    */
-  static create(data) {
-    this.notificationController
+  create(data) {
+    return this.notificationController
       .create(data)
-      .then((result) => {
-        return result;
-      }, (err) => {
+      .then(result => result)
+      .catch((err) => {
         throw err;
       });
   }
