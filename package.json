@@ -10,8 +10,13 @@
     "build": "npm run lint && npm run compile",
     "prepublish": "npm run build",
     "lint": "eslint src",
-    "test": "echo \"To be implemented\"",
+    "test": "better-npm-run test",
     "compile": "babel src --out-dir dist"
+  },
+  "betterScripts": {
+    "test": {
+      "command": "mocha --compilers js:babel-register -b test/spec/*.spec.js"
+    }
   },
   "babel": {
     "presets": [
@@ -27,7 +32,7 @@
   },
   "eslintConfig": {
     "plugins": [
-      "cucumber"
+      "mocha"
     ],
     "extends": "airbnb",
     "parser": "babel-eslint",
@@ -37,6 +42,11 @@
       "no-use-before-define": 0,
       "object-curly-spacing": 0,
       "consistent-return": 0
+    },
+    "globals": {
+      "describe": true,
+      "it": true,
+      "before": true
     }
   },
   "repository": {
@@ -57,8 +67,7 @@
     "debug": "^2.6.2",
     "fs": "0.0.1-security",
     "mongoose": "^4.7.8",
-    "path": "^0.12.7",
-    "socket.io": "^1.7.2"
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "babel-cli": "^6.23.0",
@@ -69,11 +78,17 @@
     "babel-preset-es2016": "^6.22.0",
     "babel-preset-es2017": "^6.22.0",
     "babel-preset-stage-0": "^6.5.0",
+    "better-npm-run": "0.0.14",
+    "chai": "^3.5.0",
+    "chance": "^1.0.6",
     "eslint": "^3.15.0",
     "eslint-config-airbnb": "^14.1.0",
-    "eslint-plugin-cucumber": "^0.1.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
-    "eslint-plugin-react": "^6.9.0"
+    "eslint-plugin-mocha": "^4.8.0",
+    "eslint-plugin-react": "^6.9.0",
+    "mocha": "^3.2.0",
+    "socket.io": "^1.7.3",
+    "socket.io-client": "^1.7.3"
   }
 }

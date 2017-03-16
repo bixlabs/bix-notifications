@@ -2,19 +2,14 @@
 /* eslint-disable */
 import NotificationDatabaseContract from './database';
 import Notification from './mongo-model-example';
-import databaseConnection from './mongo-connection-example';
 
 class MongoNotificationDatabase extends NotificationDatabaseContract {
-  constructor(config) {
-    databaseConnection.connect(config);
-  }
-
   create(data) {
     return new Notification(data).save();
   }
 
   update(id, data) {
-    return Notification.findByIdAndUpdate(id, data);
+    return Notification.findByIdAndUpdate(id, data, { new: true });
   }
 
   remove(id) {
