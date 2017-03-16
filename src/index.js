@@ -1,42 +1,28 @@
-import db from './notifications/db';
-import Configuration from './notifications/config';
-import notificationController from './notifications/controller';
+import NotificationController from './notifications/controller';
 
 class Notification {
-  constructor(config) {
-    this.config = new Configuration(config);
-    this.configDatabase = this.config.database;
-    this.baseApi = this.config.baseApi;
+  constructor(database) {
+    this.notificationController = new NotificationController(database);
+
+    this.getAllUnread = this.notificationController.getAllUnread;
+    this.setAsRead = this.notificationController.setAsRead;
+    this.remove = this.notificationController.remove;
+    this.setAllAsRead = this.notificationController.setAllAsRead;
   }
 
-  /**
-   * This method will be modified!
-   */
-  startServer(app) {
-    const self = this;
-    self.app = app;
-    self.io = app.io;
-    db.connect(this.configDatabase);
+  startServer(socketIO) {
+    this.io = socketIO;
 
-    // Expose endpoints
-    self.app.get(`${self.baseApi}/all/:userid`, notificationController.getAll);
-    self.app.put(`${self.baseApi}/:notificationId`, notificationController.updateUnread);
-    self.app.delete(`${self.baseApi}/:notificationId`, notificationController.delete);
-    self.app.post(`${self.baseApi}/all`, notificationController.updateAllUnread);
-
-    self.io.on('connection', (socket) => {
+    this.io.on('connection', (socket) => {
       socket.emit('who-are-you');
 
-      socket.on('check-in', (user, ack) => {
-        self.io.sockets[user.id] = socket;
-        self.sendUnread(user.id);
-
-        // Send to client endpoint base route forexposed endpoints
-        ack(`{"baseApi":"${self.baseApi}"}`);
+      socket.on('check-in', (user) => {
+        this.io.sockets[user.id] = socket;
+        this.sendUnread(user.id);
       });
 
       socket.on('check-news', (user) => {
-        self.sendUnsent(user.id);
+        this.sendUnsent(user.id);
       });
     });
   }
@@ -50,10 +36,10 @@ class Notification {
     const user = notification.to;
     this.io.sockets[user].emit(event, notification, (ack) => {
       if (ack) {
-        notificationController
-        .update(notification._id, { sent: true }, //eslint-disable-line
-          (err) => {
-            if (err) throw err;
+        this.notificationController
+          .update(notification._id, { sent: true }) //eslint-disable-line
+          .then((result) => {
+            return result;
           });
       }
     });
@@ -64,15 +50,16 @@ class Notification {
    * @param  {string} userId user identifier
    */
   sendUnread(userId) {
-    const self = this;
     if (userId) {
-      notificationController
-      .getUnread(userId, (err, data) => {
-        if (err) throw err;
-        data.forEach((notification) => {
-          self.send('unread', notification);
+      this.notificationController
+        .getAllUnread(userId)
+        .then((data) => {
+          data.forEach((notification) => {
+            this.send('unread', notification);
+          });
+        }, (err) => {
+          throw err;
         });
-      });
     }
   }
 
@@ -81,15 +68,16 @@ class Notification {
    * @param  {string} userId User identifier
    */
   sendUnsent(userId) {
-    const self = this;
     if (userId) {
-      notificationController
-      .getUnsent(userId, (err, data) => {
-        if (err) throw err;
-        data.forEach((notification) => {
-          self.send('news', notification);
+      this.notificationController
+        .getAllUnsent(userId)
+        .then((data) => {
+          data.forEach((notification) => {
+            this.send('news', notification);
+          });
+        }, (err) => {
+          throw err;
         });
-      });
     }
   }
 
@@ -101,9 +89,13 @@ class Notification {
    * @param  {string} data.msg   notification content
    */
   static create(data) {
-    notificationController.create(data, (err) => {
-      if (err) throw err;
-    });
+    this.notificationController
+      .create(data)
+      .then((result) => {
+        return result;
+      }, (err) => {
+        throw err;
+      });
   }
 }
 
