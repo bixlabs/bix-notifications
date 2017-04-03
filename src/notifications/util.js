@@ -1,23 +1,19 @@
-async function tryCallbackOrPromise(promise, callback = null) {
+function tryCallbackOrReturnResult(data, callback = null) {
   if (isValidCallback(callback)) {
-    promise.then((data) => {
-      callback(null, data);
-    })
-      .catch(callback);
+    return callback(null, data);
   }
-  await promise;
+
+  return data;
 }
 
 function isValidCallback(callback) {
   return typeof callback === 'function';
 }
 
-function tryCallbackOrThrowError(error, callback = null) {
+function tryCallbackForError(error, callback = null) {
   if (isValidCallback(callback)) {
-    callback(error);
-  } else {
-    throw error;
+    return callback(error, null);
   }
 }
 
-export {tryCallbackOrPromise, tryCallbackOrThrowError};
+export {tryCallbackOrReturnResult, tryCallbackForError};

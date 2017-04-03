@@ -10,12 +10,12 @@
     "build": "npm run lint && npm run compile",
     "prepublish": "npm run build",
     "lint": "eslint src",
-    "test": "better-npm-run test",
+    "test": "nyc better-npm-run test",
     "compile": "babel src --out-dir dist"
   },
   "betterScripts": {
     "test": {
-      "command": "mocha --compilers js:babel-register -b test/spec/*.spec.js"
+      "command": "mocha --compilers js:babel-register -b test/unit/*.spec.js"
     }
   },
   "babel": {
@@ -46,7 +46,8 @@
     "globals": {
       "describe": true,
       "it": true,
-      "before": true
+      "before": true,
+      "beforeEach": true
     }
   },
   "repository": {
@@ -78,7 +79,10 @@
     "babel-preset-es2016": "^6.22.0",
     "babel-preset-es2017": "^6.22.0",
     "babel-preset-stage-0": "^6.5.0",
+    "babel-register": "^6.24.0",
+    "babel-runtime": "^6.23.0",
     "better-npm-run": "0.0.14",
+    "bluebird": "^3.5.0",
     "chai": "^3.5.0",
     "chance": "^1.0.6",
     "eslint": "^3.15.0",
@@ -88,6 +92,7 @@
     "eslint-plugin-mocha": "^4.8.0",
     "eslint-plugin-react": "^6.9.0",
     "mocha": "^3.2.0",
+    "nyc": "^10.2.0",
     "socket.io": "^1.7.3",
     "socket.io-client": "^1.7.3"
   }

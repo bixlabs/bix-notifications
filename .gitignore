@@ -22,3 +22,5 @@ npm-debug.log
 cookiefile
 dist
 .env
+.nyc_output
+
