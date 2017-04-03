@@ -3,9 +3,9 @@ class NotificationDatabaseContract {
 
   create(data) {}
 
-  update(notificationId, data) {}
+  update(id, data) {}
 
-  remove(notificationId) {}
+  remove(id) {}
 
   setAsRead(id) {}
 
