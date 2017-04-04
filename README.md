@@ -99,5 +99,5 @@ $ DEBUG=web-notifications <Your-start-command-here>
 ```
 That will do the job.
 
-If this documentation still doesn't make sense to you go to [Debug](https://www.npmjs.com/package/debug)documentation 
+If this documentation still doesn't make sense to you go to [Debug](https://www.npmjs.com/package/debug) documentation 
 which is the library we are using.
