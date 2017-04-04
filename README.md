@@ -73,6 +73,24 @@ boot(app, __dirname, function(err) {
 });
 ```
 
+## How to provide your own Database Implementation
+Check this [Database Contract inside the project](https://github.com/bixlabs/bix-notifications/blob/master/src/notifications/contracts/database.js).
+
+You will need to implement each of the functions defined in that contract with whatever database you are using, 
+for now each function must return a promise which should result to the value specified 
+in the JSDOC of the function (We said should because in reality it can resolve to whatever 
+make sense to you as long as it is wrapped in a promise).
+
+After having your own implementation (for simplicity sake let's call it _MySQLNotificationAdapter_) you just have to pass it to the controller like this:
+
+```JavaScript
+const notificationController = new NotificationController(new MySQLNotificationAdapter());
+// After this you are going to be able to do:
+notificationController.create(notification); // <--- will create a notification.
+```
+
+This is a [Mongo Database Implementation](https://github.com/bixlabs/bix-notifications/blob/master/src/notifications/contracts/mongo-database-example.js) example using a [Mongoose Model](https://github.com/bixlabs/bix-notifications/blob/master/src/notifications/contracts/mongo-model-example.js)
+
 ## How to activate Debug mode
 You just need  to run your server with a specific DEBUG environment variable like this:
 
