@@ -14,6 +14,8 @@ function tryCallbackForError(error, callback = null) {
   if (isValidCallback(callback)) {
     return callback(error, null);
   }
+
+  return error;
 }
 
 export {tryCallbackOrReturnResult, tryCallbackForError};

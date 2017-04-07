@@ -25,7 +25,7 @@ class NotificationController {
       return tryCallbackOrReturnResult(notification, callback);
     } catch (error) {
       Debug.error(`An error was thrown while trying to create a Notification: ${error}`);
-      tryCallbackForError(error, callback);
+      return tryCallbackForError(error, callback);
     }
   }
 
@@ -42,7 +42,7 @@ class NotificationController {
       return tryCallbackOrReturnResult(notification, callback);
     } catch (error) {
       Debug.error(`An error was thrown while trying to update a Notification: ${id} -- ${error}`);
-      tryCallbackForError(error, callback);
+      return tryCallbackForError(error, callback);
     }
   }
 
@@ -58,7 +58,7 @@ class NotificationController {
       return tryCallbackOrReturnResult(notifications, callback);
     } catch (error) {
       Debug.error(`An error was thrown while trying to find all Notifications of a user: ${userId} -- ${error}`);
-      tryCallbackForError(error, callback);
+      return tryCallbackForError(error, callback);
     }
   }
 
@@ -75,7 +75,7 @@ class NotificationController {
       return tryCallbackOrReturnResult(notification, callback);
     } catch (error) {
       Debug.error(`An error was thrown while trying to set as read a Notification: ${id} -- ${error}`);
-      tryCallbackForError(error, callback);
+      return tryCallbackForError(error, callback);
     }
   }
 
@@ -92,7 +92,7 @@ class NotificationController {
       return tryCallbackOrReturnResult(notifications, callback);
     } catch (error) {
       Debug.error(`An error was thrown while trying to set all Notifications as read of user: ${userId} -- ${error}`);
-      tryCallbackForError(error, callback);
+      return tryCallbackForError(error, callback);
     }
   }
 
@@ -108,7 +108,7 @@ class NotificationController {
       return tryCallbackOrReturnResult(notification, callback);
     } catch (error) {
       Debug.error(`An error was thrown while trying to remove a Notification: ${id} -- ${error}`);
-      tryCallbackForError(error, callback);
+      return tryCallbackForError(error, callback);
     }
   }
 
@@ -125,7 +125,7 @@ class NotificationController {
     } catch (error) {
       Debug.error(`An error was thrown while trying to get all unread 
         Notifications of a user: ${userId} as read -- ${error}`);
-      tryCallbackForError(error, callback);
+      return tryCallbackForError(error, callback);
     }
   }
 
@@ -143,6 +143,7 @@ class NotificationController {
       Debug.error(`An error was thrown while trying to get all unsent 
         Notifications of a user: ${userId} -- ${error}`);
       tryCallbackForError(error, callback);
+      return tryCallbackForError(error, callback);
     }
   }
 
