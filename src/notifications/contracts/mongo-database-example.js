@@ -9,7 +9,8 @@ class MongoNotificationDatabase extends NotificationDatabaseContract {
   }
 
   update(id, data) {
-    return Notification.findByIdAndUpdate(id, data, { new: true });
+    console.log();
+    return Notification.findByIdAndUpdate(id, data, {new: true});
   }
 
   remove(id) {
@@ -17,24 +18,24 @@ class MongoNotificationDatabase extends NotificationDatabaseContract {
   }
 
   setAsRead(id) {
-    return Notification.update(id, { unread: false });
+    return Notification.update(id, {unread: false});
   }
 
   setAllAsRead(userId) {
-    return Notification.update({ unread: true, to: userId }, { unread: false }, { multi: true });
+    return Notification.update({unread: true, to: userId}, {unread: false}, {multi: true});
   }
 
   getAllUnread(userId) {
-    return Notification.find({ to: userId, unread: true });
+    return Notification.find({to: userId, unread: true});
   }
 
   getAllUnsent(userId) {
-    return Notification.find({ to: userId, sent: false });
+    return Notification.find({to: userId, sent: false});
 
   }
 
   findAllByUser(userId) {
-    return Notification.find({ to: userId });
+    return Notification.find({to: userId});
   }
 }
 
