@@ -81,10 +81,10 @@ for now each function must return a promise which should result to the value spe
 in the JSDOC of the function (We said should because in reality it can resolve to whatever 
 make sense to you as long as it is wrapped in a promise).
 
-After having your own implementation (for simplicity sake let's call it _MySQLNotificationAdapter_) you just have to pass it to the controller like this:
+After having your own implementation (for simplicity sake let's call it _MyOwnNotificationAdapter_) you just have to pass it to the controller like this:
 
 ```JavaScript
-const notificationController = new NotificationController(new MySQLNotificationAdapter());
+const notificationController = new NotificationController(new MyOwnNotificationAdapter());
 // After this you are going to be able to do:
 notificationController.create(notification); // <--- will create a notification.
 ```
