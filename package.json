@@ -4,7 +4,7 @@
   "description": "Notification module",
   "main": "dist/index.js",
   "engines": {
-    "node": ">=5.11.0"
+    "node": ">=4.0.0"
   },
   "scripts": {
     "build": "npm run lint && npm run compile",
@@ -104,9 +104,9 @@
   "author": "Edd Suárez <eddsuarez89@gmail.com> (https://github.com/eddsuarez)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/EddSuarez/notifications/issues"
+    "url": "https://github.com/bixlabs/bix-notifications/issues"
   },
-  "homepage": "https://github.com/EddSuarez/notifications#readme",
+  "homepage": "https://github.com/bixlabs/bix-notifications/issues#readme",
   "dependencies": {
     "debug": "^2.6.2",
     "fs": "0.0.1-security",
